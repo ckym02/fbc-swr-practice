@@ -1,17 +1,12 @@
-import { useState } from "react";
 import "./App.css";
+import { useHttpStatus } from "./useHttpStatus";
 
 function App() {
-  const url = "https://httpstat.us/200?sleep=2000";
-  const headers = { Accept: "application/json" };
+  const { httpStatus, isLoading, isError } = useHttpStatus();
 
-  const [status, setStatus] = useState("");
-
-  fetch(url, { headers })
-    .then((res) => res.json())
-    .then((json) => setStatus(json.description));
-
-  return <>{status && <p>Status : {status}</p>}</>;
+  if (isError) return <p>Failed to load.</p>;
+  if (isLoading) return <p>Loading...</p>;
+  return <p>Status:{httpStatus.description}</p>;
 }
 
 export default App;
